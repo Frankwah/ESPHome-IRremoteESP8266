@@ -9,7 +9,7 @@
 namespace esphome
 {
     namespace samsung
-    {        
+    {
         static const char *const TAG = "samsung.climate";
 
         void SamsungClimate::setup()
@@ -69,18 +69,22 @@ namespace esphome
                     switch (this->fan_mode.value())
                     {
                     case climate::CLIMATE_FAN_AUTO:
+                        this->ac_.setQuiet(false);
                         this->ac_.setFan(kSamsungAcFanAuto);
                         break;
                     case climate::CLIMATE_FAN_QUIET:
-                        this->ac_.setFan(kSamsungAcFanMin);
+                        this->ac_.setQuiet(true);
                         break;
                     case climate::CLIMATE_FAN_LOW:
+                        this->ac_.setQuiet(false);
                         this->ac_.setFan(kSamsungAcFanLow);
                         break;
                     case climate::CLIMATE_FAN_MEDIUM:
+                        this->ac_.setQuiet(false);
                         this->ac_.setFan(kSamsungAcFanMed);
                         break;
                     case climate::CLIMATE_FAN_HIGH:
+                        this->ac_.setQuiet(false);
                         this->ac_.setFan(kSamsungAcFanHigh);
                         break;
                     }
@@ -89,20 +93,20 @@ namespace esphome
                 switch (this->swing_mode)
                 {
                 case climate::CLIMATE_SWING_OFF:
-                    this->ac_.setSwing(false);                    
-                    this->ac_.setSwingH(false);                    
+                    this->ac_.setSwing(false);
+                    this->ac_.setSwingH(false);
                     break;
                 case climate::CLIMATE_SWING_VERTICAL:
-                    this->ac_.setSwing(true);                    
-                    this->ac_.setSwingH(false);                    
+                    this->ac_.setSwing(true);
+                    this->ac_.setSwingH(false);
                     break;
                 case climate::CLIMATE_SWING_HORIZONTAL:
-                    this->ac_.setSwing(false);                    
-                    this->ac_.setSwingH(true);                    
+                    this->ac_.setSwing(false);
+                    this->ac_.setSwingH(true);
                     break;
                 case climate::CLIMATE_SWING_BOTH:
-                    this->ac_.setSwing(true);                    
-                    this->ac_.setSwingH(true);                    
+                    this->ac_.setSwing(true);
+                    this->ac_.setSwingH(true);
                     break;
                 }
 

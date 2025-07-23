@@ -9,16 +9,6 @@ AUTO_LOAD = ["climate_ir", "ir_remote_base"]
 samsung_ns = cg.esphome_ns.namespace("samsung")
 samsungClimate = samsung_ns.class_("SamsungClimate", climate_ir.ClimateIR)
 
-# Model = samsung_ns.enum("Model")
-# MODELS = {
-#     "ARRAH2E": Model.ARRAH2E,
-#     "ARDB1": Model.ARDB1,
-#     "ARREB1E": Model.ARREB1E,
-#     "ARJW2": Model.ARJW2,
-#     "ARRY4": Model.ARRY4,
-#     "ARREW4E": Model.ARREW4E,
-# }
-
 CONFIG_SCHEMA = climate_ir.climate_ir_with_receiver_schema(samsungClimate).extend(
     {
         # cv.Required(CONF_MODEL): cv.enum(MODELS),

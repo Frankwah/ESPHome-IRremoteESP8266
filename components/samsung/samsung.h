@@ -30,5 +30,5 @@ namespace esphome
             IRSamsungAc ac_ = IRSamsungAc(255); // pin is not used
         };
 
-    } // namespace panasonic
+    } // namespace samsung
 } // namespace esphome
