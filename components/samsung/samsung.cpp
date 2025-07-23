@@ -18,7 +18,7 @@ namespace esphome
             this->apply_state();
         }
 
-        climate::ClimateTraits PanasonicClimate::traits()
+        climate::ClimateTraits SamsungClimate::traits()
         {
             auto traits = climate_ir::ClimateIR::traits();
 
@@ -28,14 +28,14 @@ namespace esphome
             return traits;
         }
 
-        void PanasonicClimate::transmit_state()
+        void SamsungClimate::transmit_state()
         {
             this->apply_state();
 
             ac_.send(1);
         }
 
-        void PanasonicClimate::apply_state()
+        void SamsungClimate::apply_state()
         {
             if (this->mode == climate::CLIMATE_MODE_OFF)
             {
@@ -48,19 +48,19 @@ namespace esphome
                 switch (this->mode)
                 {
                 case climate::CLIMATE_MODE_HEAT_COOL:
-                    this->ac_.setMode(kPanasonicAcAuto);
+                    this->ac_.setMode(kSamsungAcAuto);
                     break;
                 case climate::CLIMATE_MODE_HEAT:
-                    this->ac_.setMode(kPanasonicAcHeat);
+                    this->ac_.setMode(kSamsungAcHeat);
                     break;
                 case climate::CLIMATE_MODE_COOL:
-                    this->ac_.setMode(kPanasonicAcCool);
+                    this->ac_.setMode(kSamsungAcCool);
                     break;
                 case climate::CLIMATE_MODE_DRY:
-                    this->ac_.setMode(kPanasonicAcDry);
+                    this->ac_.setMode(kSamsungAcDry);
                     break;
                 case climate::CLIMATE_MODE_FAN_ONLY:
-                    this->ac_.setMode(kPanasonicAcFan);
+                    this->ac_.setMode(kSamsungAcFan);
                     break;
                 }
 
@@ -69,19 +69,19 @@ namespace esphome
                     switch (this->fan_mode.value())
                     {
                     case climate::CLIMATE_FAN_AUTO:
-                        this->ac_.setFan(kPanasonicAcFanAuto);
+                        this->ac_.setFan(kSamsungAcFanAuto);
                         break;
                     case climate::CLIMATE_FAN_QUIET:
-                        this->ac_.setFan(kPanasonicAcFanMin);
+                        this->ac_.setFan(kSamsungAcFanMin);
                         break;
                     case climate::CLIMATE_FAN_LOW:
-                        this->ac_.setFan(kPanasonicAcFanLow);
+                        this->ac_.setFan(kSamsungAcFanLow);
                         break;
                     case climate::CLIMATE_FAN_MEDIUM:
-                        this->ac_.setFan(kPanasonicAcFanMed);
+                        this->ac_.setFan(kSamsungAcFanMed);
                         break;
                     case climate::CLIMATE_FAN_HIGH:
-                        this->ac_.setFan(kPanasonicAcFanHigh);
+                        this->ac_.setFan(kSamsungAcFanHigh);
                         break;
                     }
                 }
@@ -89,20 +89,20 @@ namespace esphome
                 switch (this->swing_mode)
                 {
                 case climate::CLIMATE_SWING_OFF:
-                    this->ac_.setSwingVertical(kPanasonicAcSwingVMiddle);
-                    this->ac_.setSwingHorizontal(kPanasonicAcSwingHMiddle);
+                    this->ac_.setSwing(false);                    
+                    this->ac_.setSwingH(false);                    
                     break;
                 case climate::CLIMATE_SWING_VERTICAL:
-                    this->ac_.setSwingVertical(kPanasonicAcSwingVAuto);
-                    this->ac_.setSwingHorizontal(kPanasonicAcSwingHMiddle);
+                    this->ac_.setSwing(true);                    
+                    this->ac_.setSwingH(false);                    
                     break;
                 case climate::CLIMATE_SWING_HORIZONTAL:
-                    this->ac_.setSwingVertical(kPanasonicAcSwingVMiddle);
-                    this->ac_.setSwingHorizontal(kPanasonicAcSwingHAuto);
+                    this->ac_.setSwing(false);                    
+                    this->ac_.setSwingH(true);                    
                     break;
                 case climate::CLIMATE_SWING_BOTH:
-                    this->ac_.setSwingVertical(kPanasonicAcSwingVAuto);
-                    this->ac_.setSwingHorizontal(kPanasonicAcSwingHAuto);
+                    this->ac_.setSwing(true);                    
+                    this->ac_.setSwingH(true);                    
                     break;
                 }
 
@@ -112,5 +112,5 @@ namespace esphome
             ESP_LOGI(TAG, "%s", this->ac_.toString().c_str());
         }
 
-    } // namespace panasonic_general
+    } // namespace Samsung_general
 } // namespace esphome
