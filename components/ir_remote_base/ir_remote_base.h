@@ -9,6 +9,11 @@ namespace esphome
         class IrRemoteBase
         {
         protected:
+            void logPin(remote_base::RemoteTransmitterBase *transmitter_)
+            {
+                auto pin = transmitter_->pin_;
+                LOG_PIN("  Pin: ", pin)
+            }
             void sendGeneric(
                 remote_base::RemoteTransmitterBase *transmitter_,
                 const uint16_t headermark, const uint32_t headerspace,
