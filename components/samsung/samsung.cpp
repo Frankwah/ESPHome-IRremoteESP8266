@@ -5,7 +5,7 @@
 #include "esphome.h"
 #include "ir_Samsung.h"
 #include "samsung.h"
-
+#include "esphome/core/log.h"
 namespace esphome
 {
     namespace samsung
@@ -16,6 +16,7 @@ namespace esphome
         {
             climate_ir::ClimateIR::setup();
             this->apply_state();
+            LOG_PIN("  Pin: ", this->pin_);
         }
 
         climate::ClimateTraits SamsungClimate::traits()
