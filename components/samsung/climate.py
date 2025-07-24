@@ -12,17 +12,13 @@ samsungClimate = samsung_ns.class_("SamsungClimate", climate_ir.ClimateIR)
 
 CONFIG_SCHEMA = climate_ir.climate_ir_with_receiver_schema(samsungClimate).extend(
     {
-        # cv.Required(CONF_MODEL): cv.enum(MODELS),
-        cv.Required(CONF_PIN): pins.gpio_output_pin_schema
+        # cv.Required(CONF_MODEL): cv.enum(MODELS),        
     }
 )
 
 
 async def to_code(config):
     ir_remote_base.load_ir_remote()
-
     var = await climate_ir.new_climate_ir(config)
     #cg.add(var.set_model(config[CONF_MODEL]))
-    pin = await gpio_pin_expression(config[CONF_PIN])
-    cg.add(var.set_output_pin(pin))
 

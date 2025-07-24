@@ -16,7 +16,7 @@ namespace esphome
         {
             climate_ir::ClimateIR::setup();
             this->apply_state();
-            LOG_PIN("  Pin: ", this->pin_);
+            LOG_PIN("  Pin: ", this->transmitter_.pin_);
         }
 
         climate::ClimateTraits SamsungClimate::traits()
@@ -32,8 +32,8 @@ namespace esphome
         void SamsungClimate::transmit_state()
         {
             this->apply_state();
-
-            ac_.send(1);
+              
+            //ac_.send(1);
         }
 
         void SamsungClimate::apply_state()
