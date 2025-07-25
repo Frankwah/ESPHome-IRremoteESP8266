@@ -16,8 +16,8 @@ namespace esphome
         {
             climate_ir::ClimateIR::setup();            
             this->apply_state(); 
-            auto myac = IRSamsungAc(27);
-            myac.send(0);
+            auto *myac = new IRSamsungAc(27);
+            myac->send(0);
             
         }
 
