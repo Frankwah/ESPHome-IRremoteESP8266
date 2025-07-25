@@ -14,8 +14,7 @@ namespace esphome
 
         void SamsungClimate::setup()
         {
-            climate_ir::ClimateIR::setup();
-            ac_ = IRSamsungAc(255);
+            climate_ir::ClimateIR::setup();            
             this->apply_state(); 
             
         }

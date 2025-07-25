@@ -27,7 +27,7 @@ namespace esphome
             GPIOPin *transmit_pin_;
             void transmit_state() override;
             void apply_state();            
-            IRSamsungAc ac_;// = IRSamsungAc(255); // pin is not used
+            IRSamsungAc ac_ = IRSamsungAc(255); // pin is not used
 
         };
 
