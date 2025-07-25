@@ -31,9 +31,8 @@ namespace esphome
 
         void SamsungClimate::transmit_state()
         {
-            this->apply_state();
-             ESP_LOGI(TAG, "Transmit PIN Number: [%d]", this->transmit_pin_->get_pin());
-            //ac_.send(1);
+            this->apply_state();            
+            ac_.send(kSamsungAcDefaultRepeat);
         }
 
         void SamsungClimate::apply_state()
