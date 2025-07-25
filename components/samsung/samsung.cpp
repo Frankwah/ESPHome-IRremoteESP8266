@@ -15,7 +15,7 @@ namespace esphome
         const uint16_t kSamsungAcBitMark = 490;
         const uint16_t kSamsungAcOneSpace = 1560;
         const uint16_t kSamsungAcZeroSpace = 546;
-        // const uint16_t kSamsungAcSectionGap = 2886;
+        const uint16_t kSamsungAcSectionGap = 2886;
         const uint16_t kSamsungTick = 560;
         const uint16_t kSamsungHdrMarkTicks = 8;
         const uint16_t kSamsungMinMessageLengthTicks = 193;
@@ -28,6 +28,7 @@ namespace esphome
              kSamsungBits * (kSamsungBitMarkTicks + kSamsungOneSpaceTicks) +
              kSamsungBitMarkTicks);
         const uint32_t kSamsungMinGap = 0;
+        const uint16_t kSamsungAcSectionLength = 7;
 
         static const char *const TAG = "samsung.climate";
 
@@ -176,15 +177,31 @@ namespace esphome
             if (nbytes < kSamsungAcStateLength && nbytes % kSamsungAcSectionLength)
                 return; // Not an appropriate number of bytes to send a proper message.
             ESP_LOGD(TAG, "Sending %d bytes", nbytes);
-            sendGeneric(
-                this->transmitter_,
-                kSamsungAcHdrMark, kSamsungAcHdrSpace,
-                kSamsungAcBitMark, kSamsungAcOneSpace,
-                kSamsungAcBitMark, kSamsungAcZeroSpace,
-                kSamsungAcBitMark, kSamsungMinGap,
-                data, nbytes,
-                38000);
-            
+            // sendGeneric(
+            //     this->transmitter_,
+            //     kSamsungAcHdrMark, kSamsungAcHdrSpace,
+            //     kSamsungAcBitMark, kSamsungAcOneSpace,
+            //     kSamsungAcBitMark, kSamsungAcZeroSpace,
+            //     kSamsungAcBitMark, kSamsungMinGap,
+            //     data, nbytes,
+            //     38000);
+            for (uint16_t offset = 0; offset < nbytes;
+                 offset += kSamsungAcSectionLength)
+            {
+                // sendGeneric(kSamsungAcSectionMark, kSamsungAcSectionSpace,
+                //             kSamsungAcBitMark, kSamsungAcOneSpace, kSamsungAcBitMark,
+                //             kSamsungAcZeroSpace, kSamsungAcBitMark, kSamsungAcSectionGap,
+                //             data + offset, kSamsungAcSectionLength, // 7 bytes == 56 bits
+                //             38000, false, 0, 50);                   // Send in LSBF order
+                sendGeneric(
+                    this->transmitter_,
+                    kSamsungAcHdrMark, kSamsungAcHdrSpace,
+                    kSamsungAcBitMark, kSamsungAcOneSpace,
+                    kSamsungAcBitMark, kSamsungAcZeroSpace,
+                    kSamsungAcBitMark, kSamsungAcOneSpace,
+                    data+offset, 7,
+                    38000);
+            }
         }
 
     } // namespace Samsung_general
