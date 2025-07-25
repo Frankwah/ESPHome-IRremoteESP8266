@@ -19,7 +19,7 @@ namespace esphome
                 : ClimateIR(16, 30, 1.0f, true, true,
                             {climate::CLIMATE_FAN_AUTO, climate::CLIMATE_FAN_LOW, climate::CLIMATE_FAN_MEDIUM, climate::CLIMATE_FAN_HIGH, climate::CLIMATE_FAN_QUIET},
                             {climate::CLIMATE_SWING_OFF, climate::CLIMATE_SWING_VERTICAL}) {}
-            void set_transmit_pin(InternalGPIOPin *transmit_pin) { ac_ = IRSamsungAc(transmit_pin->get_pin()) }
+            void set_transmit_pin(InternalGPIOPin *transmit_pin) { ac_ = new IRSamsungAc(transmit_pin->get_pin()); }
             void setup() override;
             climate::ClimateTraits traits() override;
 
@@ -27,7 +27,7 @@ namespace esphome
             //InternalGPIOPin *transmit_pin_;
             void transmit_state() override;
             void apply_state();            
-            IRSamsungAc ac_;
+            IRSamsungAc *ac_;
 
         };
 
