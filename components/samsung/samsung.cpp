@@ -16,7 +16,7 @@ namespace esphome
         const uint16_t kSamsungAcOneSpace = 1432;
         const uint16_t kSamsungAcZeroSpace = 436;
         const uint16_t kSamsungAcSectionGap = 2886;
-        
+
         static const char *const TAG = "samsung.climate";
 
         void SamsungClimate::setup()
@@ -148,7 +148,7 @@ namespace esphome
                 std::memcpy(message + kSamsungAcSectionLength, extended_middle_section,
                             kSamsungAcSectionLength);
 
-                this->sendSamsungAC(message, kSamsungAcExtendedStateLength);
+                this->send(message, kSamsungAcExtendedStateLength);
 
                 std::memcpy(message + kSamsungAcSectionLength,
                             message + 2 * kSamsungAcSectionLength,
@@ -156,7 +156,7 @@ namespace esphome
             }
             else
             {
-                this->sendSamsungAC(message, kSamsungAcStateLength);
+                this->send(message, kSamsungAcStateLength);
             }
         }
 
