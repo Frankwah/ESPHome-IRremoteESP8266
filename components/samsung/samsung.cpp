@@ -23,6 +23,7 @@ namespace esphome
         {
             climate_ir::ClimateIR::setup();
             this->ac_.stateReset(true, false);
+            _lastsentpowerstate = false;
             this->apply_state();
         }
 
@@ -46,8 +47,7 @@ namespace esphome
         {
             if (this->mode == climate::CLIMATE_MODE_OFF)
             {
-                this->ac_.off();
-                _lastsentpowerstate = false;
+                this->ac_.off();                
             }
             else
             {
@@ -118,8 +118,7 @@ namespace esphome
                     break;
                 }
 
-                this->ac_.on();
-                _lastsentpowerstate = true;
+                this->ac_.on();                
             }
 
             ESP_LOGI(TAG, "%s", this->ac_.toString().c_str());
