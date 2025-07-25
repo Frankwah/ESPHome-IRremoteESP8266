@@ -15,10 +15,7 @@ namespace esphome
         void SamsungClimate::setup()
         {
             climate_ir::ClimateIR::setup();            
-            this->apply_state(); 
-            auto *myac = new IRSamsungAc(27, false, true);
-            myac->send(0);
-            
+            this->apply_state();                         
         }
 
         climate::ClimateTraits SamsungClimate::traits()
@@ -36,6 +33,8 @@ namespace esphome
             this->apply_state();   
             ESP_LOGI(TAG, "APPLIED STATE, SENDING...");         
             //ac_.send(1);
+            IRSamsungAc *myac = new IRSamsungAc(27, false, true);
+            myac->send();
             ESP_LOGI(TAG, "STATE SENT");    
         }
 
