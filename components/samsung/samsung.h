@@ -27,7 +27,7 @@ namespace esphome
         protected:            
             void transmit_state() override;
             void apply_state();            
-            IRSamsungAc ac_ = IRSamsungAc(27);
+            IRSamsungAc ac_ = IRSamsungAc(27, false, true);
 
         };
 
