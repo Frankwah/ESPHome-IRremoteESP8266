@@ -32,7 +32,7 @@ namespace esphome
         void SamsungClimate::transmit_state()
         {
             this->apply_state();            
-            ac_.send(kSamsungAcDefaultRepeat);
+            ac_.send(1);
         }
 
         void SamsungClimate::apply_state()
