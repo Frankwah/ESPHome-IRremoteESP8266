@@ -16,6 +16,8 @@ namespace esphome
         {
             climate_ir::ClimateIR::setup();            
             this->apply_state(); 
+            auto myac = IRSamsungAc(27);
+            myac.send(0);
             
         }
 
@@ -33,7 +35,7 @@ namespace esphome
         {
             this->apply_state();   
             ESP_LOGI(TAG, "APPLIED STATE, SENDING...");         
-            ac_.send(1);
+            //ac_.send(1);
             ESP_LOGI(TAG, "STATE SENT");    
         }
 
