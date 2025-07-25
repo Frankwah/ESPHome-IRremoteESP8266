@@ -23,8 +23,7 @@ namespace esphome
             void setup() override;
             climate::ClimateTraits traits() override;
 
-        protected:
-            //InternalGPIOPin *transmit_pin_;
+        protected:            
             void transmit_state() override;
             void apply_state();            
             IRSamsungAc *ac_;
