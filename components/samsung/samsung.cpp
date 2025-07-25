@@ -32,7 +32,7 @@ namespace esphome
         void SamsungClimate::transmit_state()
         {
             this->apply_state();
-            this->send();
+            this->check_and_send();
         }
 
         void SamsungClimate::apply_state()
@@ -118,9 +118,9 @@ namespace esphome
             ESP_LOGI(TAG, "%s", this->ac_.toString().c_str());
         }
 
-        void SamsungClimate::send()
+        void SamsungClimate::check_and_send()
         {
-            uint8_t *message = ac_->getRaw();
+            uint8_t *message = this->ac_.getRaw();
 
             // When changing power state an extende message is required
             // Timer settings aren't managed so it's ignored here
@@ -129,7 +129,7 @@ namespace esphome
                 ESP_LOGI(TAG, "Sending EXTENDED message");
 
                 // Copied from ir_Samsung.cpp
-                _lastsentpowerstate = _ac->getPower();
+                _lastsentpowerstate = this->ac_.getPower();
 
                 static const uint8_t extended_middle_section[kSamsungAcSectionLength] = {
                     0x01, 0xD2, 0x0F, 0x00, 0x00, 0x00, 0x00};
@@ -141,7 +141,7 @@ namespace esphome
                 std::memcpy(message + kSamsungAcSectionLength, extended_middle_section,
                             kSamsungAcSectionLength);
 
-                this->sendSamsungAC(message, kSamsungAcExtendedStateLength, kSamsungAcDefaultRepeat);
+                this->sendSamsungAC(message, kSamsungAcExtendedStateLength);
 
                 std::memcpy(message + kSamsungAcSectionLength,
                             message + 2 * kSamsungAcSectionLength,
@@ -149,11 +149,11 @@ namespace esphome
             }
             else
             {
-                this->sendSamsungAC(message, kSamsungAcStateLength, kSamsungAcDefaultRepeat);
+                this->sendSamsungAC(message, kSamsungAcStateLength);
             }
         }
-        void SamsungClimate::sendSamsungAC(const uint8_t *data, const uint16_t nbytes,
-                                           const uint16_t repeat)
+
+        void SamsungClimate::send(const uint8_t *data, const uint16_t nbytes)
         {
             if (nbytes < kSamsungAcStateLength && nbytes % kSamsungAcSectionLength)
                 return; // Not an appropriate number of bytes to send a proper message.

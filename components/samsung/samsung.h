@@ -26,7 +26,8 @@ namespace esphome
         protected:            
             void transmit_state() override;
             void apply_state();    
-            void send();        
+            void check_and_send();        
+            void send(const uint8_t *data, const uint16_t nbytes);        
             IRSamsungAc ac_ = IRSamsungAc(255); // pin is not used
             bool _lastsentpowerstate;
         };
