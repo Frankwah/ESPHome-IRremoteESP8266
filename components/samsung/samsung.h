@@ -27,7 +27,7 @@ namespace esphome
             //InternalGPIOPin *transmit_pin_;
             void transmit_state() override;
             void apply_state();            
-            IRSamsungAc ac_ = nullptr;
+            IRSamsungAc ac_;
 
         };
 
