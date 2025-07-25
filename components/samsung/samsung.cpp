@@ -15,7 +15,19 @@ namespace esphome
         const uint16_t kSamsungAcBitMark = 586;
         const uint16_t kSamsungAcOneSpace = 1432;
         const uint16_t kSamsungAcZeroSpace = 436;
-        const uint16_t kSamsungAcSectionGap = 2886;
+        //const uint16_t kSamsungAcSectionGap = 2886;
+        const uint16_t kSamsungTick = 560;
+        const uint16_t kSamsungHdrMarkTicks = 8;
+        const uint16_t kSamsungMinMessageLengthTicks = 193;
+        const uint16_t kSamsungHdrSpaceTicks = 8;
+        const uint16_t kSamsungBitMarkTicks = 1;
+        const uint16_t kSamsungOneSpaceTicks = 3;
+        const uint16_t kSamsungMinGapTicks =
+            kSamsungMinMessageLengthTicks -
+            (kSamsungHdrMarkTicks + kSamsungHdrSpaceTicks +
+             kSamsungBits * (kSamsungBitMarkTicks + kSamsungOneSpaceTicks) +
+             kSamsungBitMarkTicks);
+        const uint32_t kSamsungMinGap = kSamsungMinGapTicks * kSamsungTick;
 
         static const char *const TAG = "samsung.climate";
 
@@ -47,7 +59,7 @@ namespace esphome
         {
             if (this->mode == climate::CLIMATE_MODE_OFF)
             {
-                this->ac_.off();                
+                this->ac_.off();
             }
             else
             {
@@ -118,7 +130,7 @@ namespace esphome
                     break;
                 }
 
-                this->ac_.on();                
+                this->ac_.on();
             }
 
             ESP_LOGI(TAG, "%s", this->ac_.toString().c_str());
@@ -163,13 +175,13 @@ namespace esphome
         {
             if (nbytes < kSamsungAcStateLength && nbytes % kSamsungAcSectionLength)
                 return; // Not an appropriate number of bytes to send a proper message.
-
+            ESP_LOGD(TAG, "Sending %d bytes", nbytes);
             sendGeneric(
                 this->transmitter_,
                 kSamsungAcHdrMark, kSamsungAcHdrSpace,
                 kSamsungAcBitMark, kSamsungAcOneSpace,
                 kSamsungAcBitMark, kSamsungAcZeroSpace,
-                kSamsungAcBitMark, kSamsungAcSectionGap,
+                kSamsungAcBitMark, kSamsungMinGap,
                 data, nbytes,
                 38000);
         }
