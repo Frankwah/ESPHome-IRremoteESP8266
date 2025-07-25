@@ -32,7 +32,7 @@ namespace esphome
         void SamsungClimate::transmit_state()
         {
             this->apply_state();
-            LOG_PIN("  Transmit Pin: ", this->transmit_pin_);
+            LOG_PIN("  Transmit Pin: ", this->transmit_pin_.get_pin());
             //ac_.send(1);
         }
 
