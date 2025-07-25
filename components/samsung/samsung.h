@@ -4,7 +4,7 @@
 #include "esphome/core/component.h"
 #include "esphome/core/automation.h"
 #include "esphome/components/climate_ir/climate_ir.h"
-
+#include "esphome/components/ir_remote_base/ir_remote_base.h"
 #include "ir_Samsung.h"
 
 
@@ -12,23 +12,23 @@ namespace esphome
 {
     namespace samsung
     {       
-        class SamsungClimate : public climate_ir::ClimateIR
+        class SamsungClimate : public climate_ir::ClimateIR, public ir_remote_base::IrRemoteBase
         {
         public:
             SamsungClimate()
                 : ClimateIR(16, 30, 1.0f, true, true,
                             {climate::CLIMATE_FAN_AUTO, climate::CLIMATE_FAN_LOW, climate::CLIMATE_FAN_MEDIUM, climate::CLIMATE_FAN_HIGH, climate::CLIMATE_FAN_QUIET},
                             {climate::CLIMATE_SWING_OFF, climate::CLIMATE_SWING_VERTICAL}) {}
-            //void set_transmit_pin(InternalGPIOPin *transmit_pin) { ac_ = new IRSamsungAc(transmit_pin->get_pin()); }
-            void set_transmit_pin(InternalGPIOPin *transmit_pin) {}
+            
             void setup() override;
             climate::ClimateTraits traits() override;
 
         protected:            
             void transmit_state() override;
-            void apply_state();            
-            IRSamsungAc ac_ = IRSamsungAc(27, false, true);
-
+            void apply_state();    
+            void send();        
+            IRSamsungAc ac_ = IRSamsungAc(255); // pin is not used
+            bool _lastsentpowerstate;
         };
 
     } // namespace samsung

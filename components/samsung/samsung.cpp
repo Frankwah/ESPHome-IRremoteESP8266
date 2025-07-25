@@ -14,8 +14,9 @@ namespace esphome
 
         void SamsungClimate::setup()
         {
-            climate_ir::ClimateIR::setup();            
-            this->apply_state();                         
+            climate_ir::ClimateIR::setup();
+            this->ac_.stateReset(true, false);            
+            this->apply_state();
         }
 
         climate::ClimateTraits SamsungClimate::traits()
@@ -30,12 +31,8 @@ namespace esphome
 
         void SamsungClimate::transmit_state()
         {
-            this->apply_state();   
-            ESP_LOGI(TAG, "APPLIED STATE, SENDING...");         
-            //ac_.send(1);
-            IRSamsungAc *myac = new IRSamsungAc(27, false, true);
-            myac->send();
-            ESP_LOGI(TAG, "STATE SENT");    
+            this->apply_state();
+            this->send();
         }
 
         void SamsungClimate::apply_state()
@@ -43,6 +40,7 @@ namespace esphome
             if (this->mode == climate::CLIMATE_MODE_OFF)
             {
                 this->ac_.off();
+                _lastsentpowerstate = false;
             }
             else
             {
@@ -114,9 +112,60 @@ namespace esphome
                 }
 
                 this->ac_.on();
+                _lastsentpowerstate = true;
             }
 
             ESP_LOGI(TAG, "%s", this->ac_.toString().c_str());
+        }
+
+        void SamsungClimate::send()
+        {
+            uint8_t *message = ac_->getRaw();
+
+            // When changing power state an extende message is required
+            // Timer settings aren't managed so it's ignored here
+            if (this->ac_.getPower() != _lastsentpowerstate)
+            {
+                ESP_LOGI(TAG, "Sending EXTENDED message");
+
+                // Copied from ir_Samsung.cpp
+                _lastsentpowerstate = _ac->getPower();
+
+                static const uint8_t extended_middle_section[kSamsungAcSectionLength] = {
+                    0x01, 0xD2, 0x0F, 0x00, 0x00, 0x00, 0x00};
+
+                std::memcpy(message + 2 * kSamsungAcSectionLength,
+                            message + kSamsungAcSectionLength,
+                            kSamsungAcSectionLength);
+
+                std::memcpy(message + kSamsungAcSectionLength, extended_middle_section,
+                            kSamsungAcSectionLength);
+
+                this->sendSamsungAC(message, kSamsungAcExtendedStateLength, kSamsungAcDefaultRepeat);
+
+                std::memcpy(message + kSamsungAcSectionLength,
+                            message + 2 * kSamsungAcSectionLength,
+                            kSamsungAcSectionLength);
+            }
+            else
+            {
+                this->sendSamsungAC(message, kSamsungAcStateLength, kSamsungAcDefaultRepeat);
+            }
+        }
+        void SamsungClimate::sendSamsungAC(const uint8_t *data, const uint16_t nbytes,
+                                           const uint16_t repeat)
+        {
+            if (nbytes < kSamsungAcStateLength && nbytes % kSamsungAcSectionLength)
+                return; // Not an appropriate number of bytes to send a proper message.
+
+            sendGeneric(
+                this->transmitter_,
+                kSamsungAcHdrMark, kSamsungAcHdrSpace,
+                kSamsungAcBitMark, kSamsungAcOneSpace,
+                kSamsungAcBitMark, kSamsungAcZeroSpace,
+                kSamsungAcBitMark, kSamsungAcMinGap,
+                data, nbytes,
+                38000);
         }
 
     } // namespace Samsung_general
