@@ -31,8 +31,10 @@ namespace esphome
 
         void SamsungClimate::transmit_state()
         {
-            this->apply_state();            
+            this->apply_state();   
+            ESP_LOGI(TAG, "APPLIED STATE, SENDING...")         
             ac_.send(1);
+            ESP_LOGI(TAG, "STATE SENT")         
         }
 
         void SamsungClimate::apply_state()
