@@ -182,7 +182,8 @@ namespace esphome
                     kSamsungAcBitMark, kSamsungAcOneSpace,
                     kSamsungAcBitMark, kSamsungAcZeroSpace,
                     kSamsungAcBitMark, kSamsungAcOneSpace,
-                    data + offset, kSamsungAcSectionLength 38000);
+                    data + offset, kSamsungAcSectionLength,
+                    38000);
             }
         }
 
