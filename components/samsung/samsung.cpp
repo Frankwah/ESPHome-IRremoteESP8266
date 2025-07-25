@@ -32,35 +32,35 @@ namespace esphome
         void SamsungClimate::transmit_state()
         {
             this->apply_state();            
-            ac.send(kSamsungAcDefaultRepeat);
+            ac_.send(kSamsungAcDefaultRepeat);
         }
 
         void SamsungClimate::apply_state()
         {
             if (this->mode == climate::CLIMATE_MODE_OFF)
             {
-                this->ac.off();
+                this->ac_.off();
             }
             else
             {
-                this->ac.setTemp(this->target_temperature);
+                this->ac_.setTemp(this->target_temperature);
 
                 switch (this->mode)
                 {
                 case climate::CLIMATE_MODE_HEAT_COOL:
-                    this->ac.setMode(kSamsungAcAuto);
+                    this->ac_.setMode(kSamsungAcAuto);
                     break;
                 case climate::CLIMATE_MODE_HEAT:
-                    this->ac.setMode(kSamsungAcHeat);
+                    this->ac_.setMode(kSamsungAcHeat);
                     break;
                 case climate::CLIMATE_MODE_COOL:
-                    this->ac.setMode(kSamsungAcCool);
+                    this->ac_.setMode(kSamsungAcCool);
                     break;
                 case climate::CLIMATE_MODE_DRY:
-                    this->ac.setMode(kSamsungAcDry);
+                    this->ac_.setMode(kSamsungAcDry);
                     break;
                 case climate::CLIMATE_MODE_FAN_ONLY:
-                    this->ac.setMode(kSamsungAcFan);
+                    this->ac_.setMode(kSamsungAcFan);
                     break;
                 }
 
@@ -69,23 +69,23 @@ namespace esphome
                     switch (this->fan_mode.value())
                     {
                     case climate::CLIMATE_FAN_AUTO:
-                        this->ac.setQuiet(false);
-                        this->ac.setFan(kSamsungAcFanAuto);
+                        this->ac_.setQuiet(false);
+                        this->ac_.setFan(kSamsungAcFanAuto);
                         break;
                     case climate::CLIMATE_FAN_QUIET:
-                        this->ac.setQuiet(true);
+                        this->ac_.setQuiet(true);
                         break;
                     case climate::CLIMATE_FAN_LOW:
-                        this->ac.setQuiet(false);
-                        this->ac.setFan(kSamsungAcFanLow);
+                        this->ac_.setQuiet(false);
+                        this->ac_.setFan(kSamsungAcFanLow);
                         break;
                     case climate::CLIMATE_FAN_MEDIUM:
-                        this->ac.setQuiet(false);
-                        this->ac.setFan(kSamsungAcFanMed);
+                        this->ac_.setQuiet(false);
+                        this->ac_.setFan(kSamsungAcFanMed);
                         break;
                     case climate::CLIMATE_FAN_HIGH:
-                        this->ac.setQuiet(false);
-                        this->ac.setFan(kSamsungAcFanHigh);
+                        this->ac_.setQuiet(false);
+                        this->ac_.setFan(kSamsungAcFanHigh);
                         break;
                     }
                 }
@@ -93,27 +93,27 @@ namespace esphome
                 switch (this->swing_mode)
                 {
                 case climate::CLIMATE_SWING_OFF:
-                    this->ac.setSwing(false);
-                    this->ac.setSwingH(false);
+                    this->ac_.setSwing(false);
+                    this->ac_.setSwingH(false);
                     break;
                 case climate::CLIMATE_SWING_VERTICAL:
-                    this->ac.setSwing(true);
-                    this->ac.setSwingH(false);
+                    this->ac_.setSwing(true);
+                    this->ac_.setSwingH(false);
                     break;
                 case climate::CLIMATE_SWING_HORIZONTAL:
-                    this->ac.setSwing(false);
-                    this->ac.setSwingH(true);
+                    this->ac_.setSwing(false);
+                    this->ac_.setSwingH(true);
                     break;
                 case climate::CLIMATE_SWING_BOTH:
-                    this->ac.setSwing(true);
-                    this->ac.setSwingH(true);
+                    this->ac_.setSwing(true);
+                    this->ac_.setSwingH(true);
                     break;
                 }
 
-                this->ac.on();
+                this->ac_.on();
             }
 
-            ESP_LOGI(TAG, "%s", this->ac.toString().c_str());
+            ESP_LOGI(TAG, "%s", this->ac_.toString().c_str());
         }
 
     } // namespace Samsung_general
