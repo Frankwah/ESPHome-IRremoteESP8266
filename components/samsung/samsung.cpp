@@ -10,12 +10,12 @@ namespace esphome
 {
     namespace samsung
     {
-        const uint16_t kSamsungAcHdrMark = 690;
-        const uint16_t kSamsungAcHdrSpace = 17844;
-        const uint16_t kSamsungAcBitMark = 586;
-        const uint16_t kSamsungAcOneSpace = 1432;
-        const uint16_t kSamsungAcZeroSpace = 436;
-        //const uint16_t kSamsungAcSectionGap = 2886;
+        const uint16_t kSamsungAcHdrMark = 2920;
+        const uint16_t kSamsungAcHdrSpace = 8960;
+        const uint16_t kSamsungAcBitMark = 490;
+        const uint16_t kSamsungAcOneSpace = 1560;
+        const uint16_t kSamsungAcZeroSpace = 546;
+        // const uint16_t kSamsungAcSectionGap = 2886;
         const uint16_t kSamsungTick = 560;
         const uint16_t kSamsungHdrMarkTicks = 8;
         const uint16_t kSamsungMinMessageLengthTicks = 193;
@@ -27,7 +27,7 @@ namespace esphome
             (kSamsungHdrMarkTicks + kSamsungHdrSpaceTicks +
              kSamsungBits * (kSamsungBitMarkTicks + kSamsungOneSpaceTicks) +
              kSamsungBitMarkTicks);
-        const uint32_t kSamsungMinGap = kSamsungMinGapTicks * kSamsungTick;
+        const uint32_t kSamsungMinGap = 0;
 
         static const char *const TAG = "samsung.climate";
 
@@ -184,6 +184,7 @@ namespace esphome
                 kSamsungAcBitMark, kSamsungMinGap,
                 data, nbytes,
                 38000);
+            
         }
 
     } // namespace Samsung_general
