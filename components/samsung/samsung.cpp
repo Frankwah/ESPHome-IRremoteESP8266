@@ -17,13 +17,7 @@ namespace esphome
         const uint16_t kSamsungAcZeroSpace = 546;
         const uint16_t kSamsungAcSectionGap = 2886;
         const uint16_t kSamsungAcSectionLength = 7;
-        // const uint16_t kSamsungTick = 560;
-        // const uint16_t kSamsungHdrMarkTicks = 8;
-        // const uint16_t kSamsungMinMessageLengthTicks = 193;
-        // const uint16_t kSamsungHdrSpaceTicks = 8;
-        // const uint16_t kSamsungBitMarkTicks = 1;
-        // const uint16_t kSamsungOneSpaceTicks = 3;
-
+ 
         static const char *const TAG = "samsung.climate";
 
         void SamsungClimate::setup()
@@ -40,7 +34,8 @@ namespace esphome
 
             traits.add_supported_swing_mode(climate::CLIMATE_SWING_HORIZONTAL);
             traits.add_supported_swing_mode(climate::CLIMATE_SWING_BOTH);
-
+            traits.add_supported_preset(climate::CLIMATE_PRESET_NONE);
+            traits.add_supported_preset(climate::CLIMATE_PRESET_BOOST);
             return traits;
         }
 
@@ -122,6 +117,16 @@ namespace esphome
                 case climate::CLIMATE_SWING_BOTH:
                     this->ac_.setSwing(true);
                     this->ac_.setSwingH(true);
+                    break;
+                }
+
+                switch (this->preset)
+                {
+                case climate::CLIMATE_PRESET_NONE:
+                    this->ac_.setPowerful(false);
+                    break;
+                case climate::CLIMATE_PRESET_BOOST:
+                    this->ac_.setPowerful(true);
                     break;
                 }
 
