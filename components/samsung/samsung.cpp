@@ -17,7 +17,7 @@ namespace esphome
         const uint16_t kSamsungAcZeroSpace = 546;
         const uint16_t kSamsungAcSectionGap = 2886;
         const uint16_t kSamsungAcSectionLength = 7;
- 
+
         static const char *const TAG = "samsung.climate";
 
         void SamsungClimate::setup()
@@ -119,17 +119,19 @@ namespace esphome
                     this->ac_.setSwingH(true);
                     break;
                 }
-
-                switch (this->preset)
+                if (this->preset.has_value())
                 {
-                case climate::CLIMATE_PRESET_NONE:
-                    this->ac_.setPowerful(false);
-                    break;
-                case climate::CLIMATE_PRESET_BOOST:
-                    this->ac_.setPowerful(true);
-                    break;
-                }
 
+                    switch (this->preset.value())
+                    {
+                    case climate::CLIMATE_PRESET_NONE:
+                        this->ac_.setPowerful(false);
+                        break;
+                    case climate::CLIMATE_PRESET_BOOST:
+                        this->ac_.setPowerful(true);
+                        break;
+                    }
+                }
                 this->ac_.on();
             }
 
