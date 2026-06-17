@@ -186,7 +186,7 @@ namespace esphome
                 ESP_LOGD(TAG,"Raw data: %hu, %hu, %hu, %hu, %hu, %hu, %hu, %hu", kSamsungAcHdrMark,kSamsungAcHdrSpace,kSamsungAcBitMark,kSamsungAcOneSpace,kSamsungAcBitMark,kSamsungAcZeroSpace,kSamsungAcBitMark,kSamsungAcOneSpace);                
                 for (size_t i = 0; i < nbytes; i++)
                 {
-                    ESP_LOGD(TAG, "%hu ", &data[i]);
+                    ESP_LOGD(TAG, "%hu ", data[i]);
                 }
                 ESP_LOGD(TAG,"%hu", kSamsungAcSectionLength);
                 sendGeneric(
