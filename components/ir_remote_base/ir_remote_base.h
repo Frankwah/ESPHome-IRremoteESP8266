@@ -103,7 +103,7 @@ raw += "]";
 
     const size_t chunk_size = 200;
 
-    for (size_t i = 0; i < s.size(); i += chunk_size)
+    for (size_t i = 0; i < raw.size(); i += chunk_size)
     {
         ESP_LOGI("IR_RAW", "%s", raw.substr(i, chunk_size).c_str());
     }
