@@ -179,16 +179,32 @@ namespace esphome
                 return; // Not an appropriate number of bytes to send a proper message.
 
             ESP_LOGD(TAG, "Sending %d bytes", nbytes);
+            ESP_LOGD(TAG, "+%u -%u",
+                     kSamsungAcHdrMark,
+                     kSamsungAcHdrSpace);
 
+            for (size_t i = 0; i < kSamsungAcSectionLength; i++) {
+                uint8_t b = data[offset + i];
+            
+                for (int bit = 7; bit >= 0; bit--) {
+                    bool one = b & (1 << bit);
+            
+                    ESP_LOGD(TAG,
+                             "+%u -%u",
+                             kSamsungAcBitMark,
+                             one ? kSamsungAcOneSpace
+                                 : kSamsungAcZeroSpace);
+                }
+            }
+
+            ESP_LOGD(TAG,
+                     "+%u -%u",
+                     kSamsungAcBitMark,
+                     kSamsungAcOneSpace);
+            
             for (uint16_t offset = 0; offset < nbytes;
                  offset += kSamsungAcSectionLength)
-            {
-                ESP_LOGD(TAG,"Raw data: %hu, %hu, %hu, %hu, %hu, %hu, %hu, %hu", kSamsungAcHdrMark,kSamsungAcHdrSpace,kSamsungAcBitMark,kSamsungAcOneSpace,kSamsungAcBitMark,kSamsungAcZeroSpace,kSamsungAcBitMark,kSamsungAcOneSpace);                
-                for (size_t i = 0; i < nbytes; i++)
-                {
-                    ESP_LOGD(TAG, "%hu ", data[offset+i]);
-                }
-                ESP_LOGD(TAG,"%hu", kSamsungAcSectionLength);
+            {                
                 sendGeneric(
                     this->transmitter_,
                     kSamsungAcHdrMark, kSamsungAcHdrSpace,
