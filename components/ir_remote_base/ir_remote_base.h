@@ -99,7 +99,16 @@ if (gap)
 
 raw += "]";
 
-ESP_LOGI("IR_RAW", "%s", raw.c_str());
+
+
+    const size_t chunk_size = 200;
+
+    for (size_t i = 0; i < s.size(); i += chunk_size)
+    {
+        ESP_LOGI("IR_RAW", "%s", s.substr(i, chunk_size).c_str());
+    }
+
+                
                 transmit.perform();
             }
         };
