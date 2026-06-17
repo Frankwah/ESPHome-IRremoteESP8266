@@ -174,47 +174,79 @@ namespace esphome
         }
 
         void SamsungClimate::send(const uint8_t *data, const uint16_t nbytes)
+{
+    if (nbytes < kSamsungAcStateLength &&
+        nbytes % kSamsungAcSectionLength)
+        return;
+
+    std::string raw = "code: [";
+    bool first = true;
+
+    for (uint16_t offset = 0;
+         offset < nbytes;
+         offset += kSamsungAcSectionLength)
+    {
+        // Header
+        if (!first) raw += ", ";
+        first = false;
+
+        raw += std::to_string(kSamsungAcHdrMark);
+        raw += ", -" + std::to_string(kSamsungAcHdrSpace);
+
+        // Dati della sezione (7 byte)
+        for (size_t byte = 0;
+             byte < kSamsungAcSectionLength;
+             byte++)
         {
-            if (nbytes < kSamsungAcStateLength && nbytes % kSamsungAcSectionLength)
-                return; // Not an appropriate number of bytes to send a proper message.
+            uint8_t value = data[offset + byte];
 
-            ESP_LOGD(TAG, "Sending %d bytes", nbytes);
-            
-            for (uint16_t offset = 0; offset < nbytes;
-                 offset += kSamsungAcSectionLength)
-            {        
-                std::string raw;
+            for (int bit = 7; bit >= 0; bit--)
+            {
+                bool one = value & (1 << bit);
 
-raw += "+" + std::to_string(kSamsungAcHdrMark);
-raw += " -" + std::to_string(kSamsungAcHdrSpace);
+                raw += ", " + std::to_string(kSamsungAcBitMark);
 
-for (size_t byte = 0; byte < kSamsungAcSectionLength; byte++) {
-    uint8_t value = data[offset + byte];
-
-    for (int bit = 7; bit >= 0; bit--) {
-        bool one = value & (1 << bit);
-
-        raw += " +" + std::to_string(kSamsungAcBitMark);
-        raw += " -" + std::to_string(
-            one ? kSamsungAcOneSpace
-                : kSamsungAcZeroSpace);
-    }
-}
-
-raw += " +" + std::to_string(kSamsungAcBitMark);
-raw += " -" + std::to_string(kSamsungAcOneSpace);
-
-ESP_LOGD(TAG, "%s", raw.c_str());
-                //sendGeneric(
-                //    this->transmitter_,
-                //    kSamsungAcHdrMark, kSamsungAcHdrSpace,
-                //    kSamsungAcBitMark, kSamsungAcOneSpace,
-                //    kSamsungAcBitMark, kSamsungAcZeroSpace,
-                //    kSamsungAcBitMark, kSamsungAcOneSpace,
-                //    data + offset, kSamsungAcSectionLength,
-                //    38000);
+                raw += ", -" + std::to_string(
+                    one ? kSamsungAcOneSpace
+                        : kSamsungAcZeroSpace);
             }
         }
 
+        // Footer
+        raw += ", " + std::to_string(kSamsungAcBitMark);
+        raw += ", -" + std::to_string(kSamsungAcOneSpace);
+
+        // Gap tra sezioni
+        if (offset + kSamsungAcSectionLength < nbytes)
+        {
+            raw += ", -" + std::to_string(kSamsungAcSectionGap);
+        }
+    }
+
+    raw += "]";
+
+    ESP_LOGI(TAG, "RAW IR:");
+    ESP_LOGI(TAG, "%s", raw.c_str());
+
+    // Invio reale
+    for (uint16_t offset = 0;
+         offset < nbytes;
+         offset += kSamsungAcSectionLength)
+    {
+        //sendGeneric(
+        //    this->transmitter_,
+        //    kSamsungAcHdrMark,
+        //    kSamsungAcHdrSpace,
+        //    kSamsungAcBitMark,
+        //    kSamsungAcOneSpace,
+        //    kSamsungAcBitMark,
+        //    kSamsungAcZeroSpace,
+        //    kSamsungAcBitMark,
+        //    kSamsungAcOneSpace,
+        //    data + offset,
+         //   kSamsungAcSectionLength,
+         //   38000);
+    }
+}
     } // namespace Samsung_general
 } // namespace esphome
