@@ -183,6 +183,12 @@ namespace esphome
             for (uint16_t offset = 0; offset < nbytes;
                  offset += kSamsungAcSectionLength)
             {
+                ESP_LOGD(TAG,"Raw data: %hu, %hu, %hu, %hu, %hu, %hu, %hu, %hu", kSamsungAcHdrMark,kSamsungAcHdrSpace,kSamsungAcBitMark,kSamsungAcOneSpace,kSamsungAcBitMark,kSamsungAcZeroSpace,kSamsungAcBitMark,kSamsungAcOneSpace)                
+                for (size_t i = 0; i < nbytes; i++)
+                {
+                    ESP_LOGD(TAG, "%hu ", data);
+                }
+                ESP_LOGD(TAG,"%hu", kSamsungAcSectionLength)
                 sendGeneric(
                     this->transmitter_,
                     kSamsungAcHdrMark, kSamsungAcHdrSpace,
