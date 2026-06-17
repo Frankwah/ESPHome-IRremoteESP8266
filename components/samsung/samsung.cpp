@@ -192,7 +192,7 @@ namespace esphome
                     data + offset, kSamsungAcSectionLength,
                     38000);
             }
-        
+        }
 
     } // namespace Samsung_general
 } // namespace esphome
