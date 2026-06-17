@@ -179,40 +179,40 @@ namespace esphome
                 return; // Not an appropriate number of bytes to send a proper message.
 
             ESP_LOGD(TAG, "Sending %d bytes", nbytes);
-            ESP_LOGD(TAG, "+%u -%u",
-                     kSamsungAcHdrMark,
-                     kSamsungAcHdrSpace);
-
-            for (size_t i = 0; i < kSamsungAcSectionLength; i++) {
-                uint8_t b = data[offset + i];
-            
-                for (int bit = 7; bit >= 0; bit--) {
-                    bool one = b & (1 << bit);
-            
-                    ESP_LOGD(TAG,
-                             "+%u -%u",
-                             kSamsungAcBitMark,
-                             one ? kSamsungAcOneSpace
-                                 : kSamsungAcZeroSpace);
-                }
-            }
-
-            ESP_LOGD(TAG,
-                     "+%u -%u",
-                     kSamsungAcBitMark,
-                     kSamsungAcOneSpace);
             
             for (uint16_t offset = 0; offset < nbytes;
                  offset += kSamsungAcSectionLength)
-            {                
-                sendGeneric(
-                    this->transmitter_,
-                    kSamsungAcHdrMark, kSamsungAcHdrSpace,
-                    kSamsungAcBitMark, kSamsungAcOneSpace,
-                    kSamsungAcBitMark, kSamsungAcZeroSpace,
-                    kSamsungAcBitMark, kSamsungAcOneSpace,
-                    data + offset, kSamsungAcSectionLength,
-                    38000);
+            {        
+                std::string raw;
+
+raw += "+" + std::to_string(kSamsungAcHdrMark);
+raw += " -" + std::to_string(kSamsungAcHdrSpace);
+
+for (size_t byte = 0; byte < kSamsungAcSectionLength; byte++) {
+    uint8_t value = data[offset + byte];
+
+    for (int bit = 7; bit >= 0; bit--) {
+        bool one = value & (1 << bit);
+
+        raw += " +" + std::to_string(kSamsungAcBitMark);
+        raw += " -" + std::to_string(
+            one ? kSamsungAcOneSpace
+                : kSamsungAcZeroSpace);
+    }
+}
+
+raw += " +" + std::to_string(kSamsungAcBitMark);
+raw += " -" + std::to_string(kSamsungAcOneSpace);
+
+ESP_LOGD(TAG, "%s", raw.c_str());
+                //sendGeneric(
+                //    this->transmitter_,
+                //    kSamsungAcHdrMark, kSamsungAcHdrSpace,
+                //    kSamsungAcBitMark, kSamsungAcOneSpace,
+                //    kSamsungAcBitMark, kSamsungAcZeroSpace,
+                //    kSamsungAcBitMark, kSamsungAcOneSpace,
+                //    data + offset, kSamsungAcSectionLength,
+                //    38000);
             }
         }
 
