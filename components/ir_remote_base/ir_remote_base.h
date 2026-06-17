@@ -57,7 +57,49 @@ namespace esphome
                     data->mark(1);
                 if (gap)
                     data->space(gap);
+std::string raw = "code: [";
 
+bool first = true;
+
+auto append = [&](int32_t value)
+{
+    if (!first)
+        raw += ", ";
+
+    raw += std::to_string(value);
+    first = false;
+};
+
+// Header
+if (headermark) append(headermark);
+if (headerspace) append(-((int32_t)headerspace));
+
+// Data
+for (uint8_t i = 0; i < length; i++)
+{
+    uint8_t d = *(message + i);
+
+    for (uint8_t bit = 0; bit < 8; bit++, d >>= 1)
+    {
+        append(onemark);
+
+        if (d & 1)
+            append(-((int32_t)onespace));
+        else
+            append(-((int32_t)zerospace));
+    }
+}
+
+// Footer
+if (footermark)
+    append(footermark);
+
+if (gap)
+    append(-((int32_t)gap));
+
+raw += "]";
+
+ESP_LOGI("IR_RAW", "%s", raw.c_str());
                 transmit.perform();
             }
         };
