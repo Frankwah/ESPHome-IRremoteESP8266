@@ -105,7 +105,7 @@ raw += "]";
 
     for (size_t i = 0; i < s.size(); i += chunk_size)
     {
-        ESP_LOGI("IR_RAW", "%s", s.substr(i, chunk_size).c_str());
+        ESP_LOGI("IR_RAW", "%s", raw.substr(i, chunk_size).c_str());
     }
 
                 
